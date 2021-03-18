@@ -65,6 +65,7 @@ class App extends Component {
     this.timersID.map(timerID => clearTimeout(timerID));
     this.activeCalculation = false;
     this.timersID = [];
+    console.log('Calculation stopped.');
   }
 
   render() {
@@ -107,7 +108,7 @@ class App extends Component {
           <DrawButton count={500} delay={10} onButtonClick={this.updateNumbers} />
         </div>
         <div className="tc dib">
-        <button
+          <button
             id="StopButton"
             className="f6 link dim br3 ph3 pv2 ma1 mb2 dib white bg-dark-green"
             type="button"
@@ -121,6 +122,7 @@ class App extends Component {
               placeholder={`Global Delay Factor=${this.global_delay_factor}`}
               size="25"
               onChange={(event) => this.onGDFTextChange(event)}
+              onKeyUp={(event) => this.onGDFKeyUp(event)}
             ></input>
             <span id="tooltiptext" className="tooltiptext"></span>
           </div>
@@ -137,6 +139,7 @@ class App extends Component {
 
   onGDFTextChange = (event) => {
     const value = event.target.value;
+    console.log('change', value);
     const tooltip = document.getElementById("tooltiptext");
     const button = document.getElementById("GDFButton");
     if (!isNaN(value) && this.min_global_delay_factor <= value && value <= this.max_global_delay_factor) {
@@ -154,6 +157,14 @@ class App extends Component {
     }
   }
 
+  onGDFKeyUp = (event) => {
+    const button = document.getElementById("GDFButton");
+    if (event.keyCode === 13 && button.disabled === false) {
+      console.log('Enter key pressed!');
+      this.onGDFButtonClick()
+    }
+  }
+
   onGDFButtonClick = () => {
     const factor = this.temporary_global_delay_factor;
     this.global_delay_factor = factor;
@@ -166,8 +177,9 @@ class App extends Component {
 
 export default App;
 
-// upload to Github
+// upload to Github and make it work
 // fix the width and position of the tooltip
+// modify the buttons that are not buttons (not to be pressed) to be different
 // make the pointer to turn to hand when hovering over a button
 // use the button with id "timer" to report the time passed since the button was pressed
 // create a delayed tootlip that shows for every button what is the time delay of each calculation
